@@ -52,3 +52,7 @@
 
 # Ignore environment configuration.
 .env*
+
+# Docker local state
+.env
+/data

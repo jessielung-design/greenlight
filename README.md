@@ -14,6 +14,22 @@ Interested? Try Greenlight v3 out on our [demo server](https://demo.bigbluebutto
 
 To install and configure Greenlight v3, please follow the instructions [here](https://docs.bigbluebutton.org/greenlight/v3/install).
 
+## Docker / GHCR
+
+This fork publishes `ghcr.io/jessielung-design/greenlight` from `.github/workflows/docker-publish.yml`.
+
+```bash
+cp .env.example .env
+docker compose up -d --build
+```
+
+The app listens on `http://127.0.0.1:5050`. Pull a prebuilt image with:
+
+```bash
+docker pull ghcr.io/jessielung-design/greenlight:latest
+```
+
+
 ## Source Code & Contributing
 
 We invite you to build upon Greenlight and help make it better. See [Contributing to BigBlueButton](http://docs.bigbluebutton.org/support/faq.html#contributing-to-bigbluebutton).
