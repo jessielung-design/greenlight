@@ -38,7 +38,7 @@ class HealthChecksController < ApplicationController
   private
 
   def check_database
-    raise 'Unable to connect to Database' unless ActiveRecord::Base.connection.active?
+    ActiveRecord::Base.connection_pool.with_connection { |connection| connection.select_value('SELECT 1') }
     raise 'Unable to connect to Database - pending migrations' unless ActiveRecord::Migration.check_all_pending!.nil?
   rescue StandardError => e
     raise "Unable to connect to Database - #{e}"
@@ -69,8 +69,9 @@ class HealthChecksController < ApplicationController
   end
 
   def check_big_blue_button
-    checksum = Digest::SHA1.hexdigest("isMeetingRunningmeetingID=0#{Rails.configuration.bigbluebutton_secret}")
-    uri = URI("#{Rails.configuration.bigbluebutton_endpoint}isMeetingRunning?meetingID=0&checksum=#{checksum}")
+    meeting_id = 'greenlight-health-check'
+    checksum = Digest::SHA1.hexdigest("isMeetingRunningmeetingID=#{meeting_id}#{Rails.configuration.bigbluebutton_secret}")
+    uri = URI("#{Rails.configuration.bigbluebutton_endpoint}isMeetingRunning?meetingID=#{meeting_id}&checksum=#{checksum}")
     res = Net::HTTP.get(uri)
     doc = Nokogiri::XML(res)
 
